@@ -2,6 +2,7 @@
 
 #include "PlatformGeneral.h"
 #include "SpinLock.h"
+#include "LockGuard.h"
 
 #include <thread>
 
@@ -21,8 +22,7 @@ int main()
 			
 			while (true)
 			{
-				Lock.Lock();
-
+				LockGuard<SpinLock> ScopedLock(Lock);
 				++value;
 				step++;
 
@@ -30,20 +30,16 @@ int main()
 				{
 					break;
 				}
-
-				Lock.Unlock();
 			}
 
 		});
-
 
 	std::thread f2([&value, &step2, &Lock]
 		{
 
 			while (true)
 			{
-				Lock.Lock();
-
+				LockGuard<SpinLock> ScopedLock(Lock);
 				++value;
 				step2++;
 
@@ -51,8 +47,6 @@ int main()
 				{
 					break;
 				}
-
-				Lock.Unlock();
 			}
 
 		});

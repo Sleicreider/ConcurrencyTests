@@ -4,7 +4,12 @@
 
 class SpinLock
 {
+	SpinLock(const SpinLock&) = delete;
+	SpinLock operator=(const SpinLock&) = delete;
+
 public:
+	SpinLock() = default;
+
 	void Lock()
 	{
 		while (true)
