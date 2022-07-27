@@ -2,6 +2,9 @@
 
 #include <atomic>
 
+// acquire & release should be sufficient and cannot dead lock
+// https://preshing.com/20170612/can-reordering-of-release-acquire-operations-introduce-deadlock/
+
 class SpinLock
 {
 	SpinLock(const SpinLock&) = delete;
@@ -18,7 +21,8 @@ public:
 			{
 				break;
 			}
-
+			
+			// intel suggestion to not starve other threads & reduce power consumption
 			while (bFlag.test(std::memory_order_relaxed))
 			{
 				PlatformGeneral::ProcessorPause();
